@@ -6,6 +6,10 @@ function openDataset(f)
     s = open(f) do file
         read(file, String)
     end
+    asDataset(s)
+end
+
+function asDataset(s)
     @show datasize=length(s)
     chars=[SortedSet(s)...]
     unksym = '□'
