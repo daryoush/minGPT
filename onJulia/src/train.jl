@@ -35,13 +35,11 @@ end
 
 
 function apply!(o::SelectiveWeightDecay, x, Δ)
-	@show "SELECTIVE WEIGHT DECAY!!!"
-	@show length(o.noDecayList)
+	length(o.noDecayList)
 	if haskey(o.noDecayList, x)
 		@show "in no decaylist"
 		return Δ
 	end
-	@show "object not in no decay list"
 	apply!(o.wd, x,  Δ)
 end
 
