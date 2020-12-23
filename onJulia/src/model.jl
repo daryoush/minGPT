@@ -31,7 +31,6 @@ Dense(in::Integer, out::Integer)= Dense(in,out, initW=smallNormalInit,initb=zero
 mingptTransformer(hiddenSize=512, attentionHeads=4, pdrop=.1) = Transformer(hiddenSize,attentionHeads, 4*hiddenSize, future = false, act = gelu, pdrop = 0.1)
 gptEmbed(d::UnivariateDistribution, size::Int, vocab_size::Int; scale = one(Float32)) = Embed(Float32(scale), Float32.(rand(d, size, vocab_size)))
 
-
 # Trying to see if a linear layer works better than dense layer for the last layer in gpt
 struct Linear{S<:AbstractArray}
   W::S
@@ -45,7 +44,7 @@ end
 
 @functor Linear
 
-function (a::Linear)(x::AbstractArray)
+function (a::Linear)(x::AbstractArray{T}) where T
   a.W*x
 end
 
@@ -63,7 +62,11 @@ function (pe::GPTPositionEmbedding{F})(x::AbstractArray{F}) where F
     pe.embedding[:, 1:size(x,2)]  # just return the needed position embedding
 end
 
-struct minGPT{ EM<:Embed,PM<:GPTPositionEmbedding,C<:Chain,DP<:Dropout, LN<:LayerNorm, PW<:Positionwise }
+struct minGPT{ EM<:Embed,
+		PM<:GPTPositionEmbedding,
+		C<:Chain,DP<:Dropout,
+		LN<:LayerNorm,
+		PW<:Positionwise }
     em::EM
     pe::PM
 	drop::DP
@@ -74,7 +77,7 @@ end
 
 @functor minGPT
 
-function (g::minGPT)(x::T) where T
+function (g::minGPT)(x::A) where {T, N, A<:AbstractArray{T, N}}
 	x=g.em(x)
 	x=g.drop(x .+g.pe(x))
 	x = g.ln(x)
@@ -93,10 +96,6 @@ function minGPT(;numberAttnLayers=2, hiddenSize=512, attentionHeads=4, vocabSize
 
     minGPT(embed,posembd, Dropout(pdrop), ln, c, pw)
 end
-
-
-## ---
-
 
 ## ---
 using Zygote

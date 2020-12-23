@@ -17,6 +17,7 @@ module Model include("src/model.jl") end
 
 lengthOfSentences=520
 model=Model.minGPT(maxBlockSize=lengthOfSentences, vocabSize=length(vocab))
+@show NumberOfParameters=sum(length(p) for p in params(model))
 
 
 ## ---
@@ -71,16 +72,45 @@ out=model(vocab(collect("Where ")))
 
 ## ---
 print(validate())
+
+## ---
+
+#trying to track allocated
+d = [trainingData(lengthOfSentences, numberOfSentencesInBatch)[1]]
+@timed Train.train!(loss,
+ 				params(model),
+				d,
+				opt)
 ## ---
 using Profile
 
 Profile.clear()
 d = [trainingData(lengthOfSentences, numberOfSentencesInBatch)[1]]
-Train.train!(loss,
+
+@profile Train.train!(loss,
  				params(model),
 				d,
 				opt)
-Juno.profiler(;c = true)
+
+
+# (Since Julia's garbage collector is written in C, such events can be detected using the C=true
+# output mode described below, or by using ProfileView.jl.)
+#https://docs.julialang.org/en/v1/manual/profile/#Memory-allocation-analysis-1
+
+# format – Introduced above, determines whether backtraces are printed with (default, :tree) or without (:flat) indentation indicating tree structure.
+# C – If true, backtraces from C and Fortran code are shown (normally they are excluded). Try running the introductory example with Profile.print(C = true). This can be extremely helpful in deciding whether it's Julia code or C code that is causing a bottleneck; setting C = true also improves the interpretability of the nesting, at the cost of longer profile dumps.
+# combine – Some lines of code contain multiple operations; for example, s += A[i] contains both an array reference (A[i]) and a sum operation. These correspond to different lines in the generated machine code, and hence there may be two or more different addresses captured during backtraces on this line. combine = true lumps them together, and is probably what you typically want, but you can generate an output separately for each unique instruction pointer with combine = false.
+# maxdepth – Limits frames at a depth higher than maxdepth in the :tree format.
+# sortedby – Controls the order in :flat format. :filefuncline (default) sorts by the source line, whereas :count sorts in order of number of collected samples.
+# noisefloor – Limits frames that are below the heuristic noise floor of the sample (only applies to format :tree). A suggested value to try for this is 2.0 (the default is 0). This parameter hides samples for which n <= noisefloor * √N, where n is the number of samples on this line, and N is the number of samples for the callee.
+# mincount – Limits frames with less than mincount occurrences.
+#
+
+
+Juno.profiler(;C = false)
+
+
+####### TODO:  Try https://github.com/astrieanna/TypeCheck.jl   to make sure types are stable in the network
 
 ## ---
 

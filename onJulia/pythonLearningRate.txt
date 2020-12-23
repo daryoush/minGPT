@@ -1,0 +1,1401 @@
+
+
+At first the decay groups are set, the initial leanring rate is used for first loop
+
+    AdamW (
+    Parameter Group 0
+        amsgrad: False
+        betas: (0.9, 0.95)
+        eps: 1e-08
+        lr: 0.0006
+        weight_decay: 0.1
+
+    Parameter Group 1
+        amsgrad: False
+        betas: (0.9, 0.95)
+        eps: 1e-08
+        lr: 0.0006
+        weight_decay: 0.0
+    )
+
+QUESTION HOW DID THIS FOLLOWING LINE GET PRINTED?  IS TRAINING SET>  WHY THE LR GOT CHANGED?   LR ON THE LINE IS ONE STEP AHEAD@@@@
+I think this line is printed at the end of the loop, but it is printed first before the output of the function
+is written, so it comes at the end of the loop, but the loop output during the loop comes after it
+
+    /home/daryoush/anaconda3/lib/python3.8/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: Found no NVIDIA driver on your system. Please check that you have an NVIDIA GPU and installed a driver from http://www.nvidia.com/Download/index.aspx (Triggered internally at  /pytorch/c10/cuda/CUDAFunctions.cpp:100.)
+      return torch._C._cuda_getDeviceCount() > 0
+    epoch 1 iter 0: train loss 4.25153. lr 5.999999e-04:   0%|          | 1/2179 [00:40<24:30:03, 40.50s/it]
+
+
+COnfig the  gradnorm
+    before opt step, config.grad_norm_clip, config.grad_norm_clip= 1.0
+    totalNorm, befor clipping:  tensor(7.7272)
+    totalNorm, after  clipping:  tensor(1.0000)
+
+RUN OPTIMIZE WITH BASE setting
+    optimizer before step AdamW (
+    Parameter Group 0
+        amsgrad: False
+        betas: (0.9, 0.95)
+        eps: 1e-08
+        lr: 0.0006
+        weight_decay: 0.1
+
+    Parameter Group 1
+        amsgrad: False
+        betas: (0.9, 0.95)
+        eps: 1e-08
+        lr: 0.0006
+        weight_decay: 0.0
+    )
+
+UPDATE LEARNING RATE FOR NEXT TRIP... NOTE WE NEED TO GET SOME DATA BEFORE WE CAN CACL THE LR
+    self.tokens count tensor(65536)
+    afte wramup warmup. lr mult:  0.9999999074403996
+    lr:  0.0005999999444642397
+
+
+
+epoch 1 iter 1: train loss 3.62981. lr 5.999997e-04:   0%|          | 2/2179 [01:16<23:43:56, 39.24s/it]
+
+before opt step, config.grad_norm_clip, config.grad_norm_clip= 1.0
+totalNorm, befor clipping:  tensor(8.2204)
+totalNorm, after  clipping:  tensor(1.0000)
+optimizer before step AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0005999999444642397
+    weight_decay: 0.1
+
+Parameter Group 1
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0005999999444642397
+    weight_decay: 0.0
+)
+self.tokens count tensor(131072)
+afte wramup warmup. lr mult:  0.9999995580247851
+lr:  0.000599999734814871
+
+epoch 1 iter 1: train loss 3.62981. lr 5.999997e-04:   0%|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**************************************************************************************
+
+start:
+
+from mingpt.model import GPT, GPTConfig
+mconf = GPTConfig(train_dataset.vocab_size, train_dataset.block_size,
+                  n_layer=2,  #8,
+                  n_head=8, n_embd=512)
+
+
+12/20/2020 01:38:34 - INFO - mingpt.model -   number of parameters: 6.437888e+06
+
+
+AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0006
+    weight_decay: 0.1
+
+Parameter Group 1
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0006
+    weight_decay: 0.0
+)
+
+
+AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0006
+    weight_decay: 0.1
+
+Parameter Group 1
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0006
+    weight_decay: 0.0
+)
+
+###  In the original page it says:
+
+/parallel/_functions.py:61: UserWarning: Was asked to gather along dimension 0, but all input tensors were scalars; will instead unsqueeze and return a vector.
+  warnings.warn('Was asked to gather along dimension 0, but all '
+epoch 1 iter 2178: train loss 0.33318. lr 3.000169e-04: 100%|██████████| 2179/2179 [09:22<00:00,  3.88it/s]
+epoch 2 iter 2178: train loss 0.17447. lr 6.000000e-05: 100%|██████████| 2179/2179 [08:45<00:00,  4.15it/s]
+
+# decay the learning rate based on our progress
+if config.lr_decay:
+    self.tokens += (y >= 0).sum() # number of tokens processed this step (i.e. label is not -100)
+
+###############  Large batch size and 2 heads
+
+AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0006
+    weight_decay: 0.1
+
+Parameter Group 1
+    amsgrad: False
+    betas: (0.9, 0.95)
+    eps: 1e-08
+    lr: 0.0006
+    weight_decay: 0.0
+)
+
+/home/daryoush/anaconda3/lib/python3.8/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: Found no NVIDIA driver on your system. Please check that you have an NVIDIA GPU and installed a driver from http://www.nvidia.com/Download/index.aspx (Triggered internally at  /pytorch/c10/cuda/CUDAFunctions.cpp:100.)
+  return torch._C._cuda_getDeviceCount() > 0
+epoch 1 iter 0: train loss 4.25153. lr 5.999999e-04:   0%|          | 1/2179 [00:29<18:00:33, 29.77s/it]
+
+self.tokens count tensor(65536)
+afte wramup warmup. lr mult:  0.9999999074403996
+lr:  0.0005999999444642397
+
+epoch 1 iter 1: train loss 3.62981. lr 5.999997e-04:   0%|          | 2/2179 [01:01<18:23:10, 30.40s/it]
+
+self.tokens count tensor(131072)
+afte wramup warmup. lr mult:  0.9999995580247851
+lr:  0.000599999734814871
+
+epoch 1 iter 2: train loss 3.95062. lr 5.999994e-04:   0%|          | 3/2179 [01:32<18:26:41, 30.52s/it]
+
+self.tokens count tensor(196608)
+afte wramup warmup. lr mult:  0.9999989485791408
+lr:  0.0005999993691474844
+
+epoch 1 iter 3: train loss 3.65570. lr 5.999988e-04:   0%|          | 4/2179 [02:03<18:28:06, 30.57s/it]
+
+self.tokens count tensor(262144)
+afte wramup warmup. lr mult:  0.9999980791037836
+lr:  0.0005999988474622701
+
+epoch 1 iter 4: train loss 3.41986. lr 5.999982e-04:   0%|          | 5/2179 [02:33<18:28:48, 30.60s/it]
+
+self.tokens count tensor(327680)
+afte wramup warmup. lr mult:  0.9999969495991656
+lr:  0.0005999981697594993
+
+epoch 1 iter 5: train loss 3.30608. lr 5.999973e-04:   0%|          | 6/2179 [03:04<18:30:29, 30.66s/it]
+
+self.tokens count tensor(393216)
+afte wramup warmup. lr mult:  0.9999955600658743
+lr:  0.0005999973360395246
+
+epoch 1 iter 6: train loss 3.33862. lr 5.999963e-04:   0%|          | 7/2179 [03:39<19:14:38, 31.90s/it]
+
+self.tokens count tensor(458752)
+afte wramup warmup. lr mult:  0.9999939105046323
+lr:  0.0005999963463027793
+
+epoch 1 iter 7: train loss 3.31396. lr 5.999952e-04:   0%|          | 8/2179 [04:09<18:54:52, 31.36s/it]
+
+self.tokens count tensor(524288)
+afte wramup warmup. lr mult:  0.9999920009162973
+lr:  0.0005999952005497783
+
+epoch 1 iter 8: train loss 3.28681. lr 5.999939e-04:   0%|          | 9/2179 [04:40<18:51:24, 31.28s/it]
+
+self.tokens count tensor(589824)
+afte wramup warmup. lr mult:  0.9999898313018627
+lr:  0.0005999938987811176
+
+epoch 1 iter 9: train loss 3.21143. lr 5.999924e-04:   0%|          | 10/2179 [05:12<18:53:49, 31.36s/it]
+
+self.tokens count tensor(655360)
+afte wramup warmup. lr mult:  0.9999874016624566
+lr:  0.0005999924409974739
+
+epoch 1 iter 9: train loss 3.21143. lr 5.999924e-04:   0%|          | 10/2179 [05:19<19:14:33, 31.94s/it]
+
+
+
+
+
+##################  My modified wiht smaller batch size:
+
+
+epoch 1 iter 1: train loss 3.33582. lr 1.171875e-05:   0%|          | 2/111539 [00:00<5:18:06,  5.84it/s]
+
+below warmup. lr mult:  0.009765625
+lr:  5.859374999999999e-06
+below warmup. lr mult:  0.01953125
+lr:  1.1718749999999999e-05
+
+epoch 1 iter 3: train loss 3.67495. lr 2.343750e-05:   0%|          | 4/111539 [00:00<5:03:10,  6.13it/s]
+
+below warmup. lr mult:  0.029296875
+lr:  1.7578125e-05
+below warmup. lr mult:  0.0390625
+lr:  2.3437499999999997e-05
+
+epoch 1 iter 5: train loss 3.88637. lr 3.515625e-05:   0%|          | 6/111539 [00:00<5:06:11,  6.07it/s]
+
+below warmup. lr mult:  0.048828125
+lr:  2.9296875e-05
+below warmup. lr mult:  0.05859375
+lr:  3.515625e-05
+
+epoch 1 iter 7: train loss 3.65903. lr 4.687500e-05:   0%|          | 8/111539 [00:01<5:02:36,  6.14it/s]
+
+below warmup. lr mult:  0.068359375
+lr:  4.1015624999999996e-05
+below warmup. lr mult:  0.078125
+lr:  4.6874999999999994e-05
+
+epoch 1 iter 9: train loss 3.42783. lr 5.859375e-05:   0%|          | 10/111539 [00:01<4:55:06,  6.30it/s]
+
+below warmup. lr mult:  0.087890625
+lr:  5.273437499999999e-05
+below warmup. lr mult:  0.09765625
+lr:  5.859375e-05
+
+epoch 1 iter 11: train loss 3.42185. lr 7.031250e-05:   0%|          | 12/111539 [00:01<4:53:07,  6.34it/s]
+
+below warmup. lr mult:  0.107421875
+lr:  6.445312499999999e-05
+below warmup. lr mult:  0.1171875
+lr:  7.03125e-05
+
+epoch 1 iter 13: train loss 3.31663. lr 8.203125e-05:   0%|          | 14/111539 [00:02<4:49:02,  6.43it/s]
+
+below warmup. lr mult:  0.126953125
+lr:  7.6171875e-05
+below warmup. lr mult:  0.13671875
+lr:  8.203124999999999e-05
+
+epoch 1 iter 15: train loss 3.30237. lr 9.375000e-05:   0%|          | 16/111539 [00:02<5:09:45,  6.00it/s]
+
+below warmup. lr mult:  0.146484375
+lr:  8.7890625e-05
+below warmup. lr mult:  0.15625
+lr:  9.374999999999999e-05
+
+epoch 1 iter 17: train loss 3.50427. lr 1.054687e-04:   0%|          | 18/111539 [00:02<5:18:27,  5.84it/s]
+
+below warmup. lr mult:  0.166015625
+lr:  9.9609375e-05
+below warmup. lr mult:  0.17578125
+lr:  0.00010546874999999999
+
+epoch 1 iter 19: train loss 3.07046. lr 1.171875e-04:   0%|          | 20/111539 [00:03<5:13:01,  5.94it/s]
+
+below warmup. lr mult:  0.185546875
+lr:  0.00011132812499999999
+below warmup. lr mult:  0.1953125
+lr:  0.0001171875
+
+epoch 1 iter 21: train loss 3.15931. lr 1.289062e-04:   0%|          | 22/111539 [00:03<5:09:05,  6.01it/s]
+
+below warmup. lr mult:  0.205078125
+lr:  0.000123046875
+below warmup. lr mult:  0.21484375
+lr:  0.00012890624999999998
+
+epoch 1 iter 23: train loss 3.20356. lr 1.406250e-04:   0%|          | 24/111539 [00:03<5:16:25,  5.87it/s]
+
+below warmup. lr mult:  0.224609375
+lr:  0.00013476562499999998
+below warmup. lr mult:  0.234375
+lr:  0.000140625
+
+epoch 1 iter 25: train loss 2.99303. lr 1.523437e-04:   0%|          | 26/111539 [00:04<5:16:02,  5.88it/s]
+
+below warmup. lr mult:  0.244140625
+lr:  0.000146484375
+below warmup. lr mult:  0.25390625
+lr:  0.00015234375
+
+epoch 1 iter 27: train loss 3.20058. lr 1.640625e-04:   0%|          | 28/111539 [00:04<5:13:35,  5.93it/s]
+
+below warmup. lr mult:  0.263671875
+lr:  0.00015820312499999998
+below warmup. lr mult:  0.2734375
+lr:  0.00016406249999999998
+
+epoch 1 iter 29: train loss 3.33298. lr 1.757812e-04:   0%|          | 30/111539 [00:05<5:29:37,  5.64it/s]
+
+below warmup. lr mult:  0.283203125
+lr:  0.000169921875
+below warmup. lr mult:  0.29296875
+lr:  0.00017578125
+
+epoch 1 iter 31: train loss 3.13625. lr 1.875000e-04:   0%|          | 32/111539 [00:05<5:06:17,  6.07it/s]
+
+below warmup. lr mult:  0.302734375
+lr:  0.00018164062499999997
+below warmup. lr mult:  0.3125
+lr:  0.00018749999999999998
+
+epoch 1 iter 33: train loss 3.14387. lr 1.992187e-04:   0%|          | 34/111539 [00:05<5:04:45,  6.10it/s]
+
+below warmup. lr mult:  0.322265625
+lr:  0.00019335937499999998
+below warmup. lr mult:  0.33203125
+lr:  0.00019921875
+
+epoch 1 iter 35: train loss 2.92615. lr 2.109375e-04:   0%|          | 36/111539 [00:05<4:51:19,  6.38it/s]
+
+below warmup. lr mult:  0.341796875
+lr:  0.000205078125
+below warmup. lr mult:  0.3515625
+lr:  0.00021093749999999997
+
+epoch 1 iter 37: train loss 2.86344. lr 2.226562e-04:   0%|          | 38/111539 [00:06<4:48:02,  6.45it/s]
+
+below warmup. lr mult:  0.361328125
+lr:  0.00021679687499999998
+below warmup. lr mult:  0.37109375
+lr:  0.00022265624999999998
+
+epoch 1 iter 39: train loss 2.61810. lr 2.343750e-04:   0%|          | 40/111539 [00:06<4:39:04,  6.66it/s]
+
+below warmup. lr mult:  0.380859375
+lr:  0.00022851562499999999
+below warmup. lr mult:  0.390625
+lr:  0.000234375
+
+epoch 1 iter 41: train loss 2.87592. lr 2.460938e-04:   0%|          | 42/111539 [00:06<4:38:51,  6.66it/s]
+
+below warmup. lr mult:  0.400390625
+lr:  0.00024023437499999997
+below warmup. lr mult:  0.41015625
+lr:  0.00024609375
+
+epoch 1 iter 43: train loss 3.03602. lr 2.578125e-04:   0%|          | 44/111539 [00:07<4:49:41,  6.41it/s]
+
+below warmup. lr mult:  0.419921875
+lr:  0.00025195312499999995
+below warmup. lr mult:  0.4296875
+lr:  0.00025781249999999996
+
+epoch 1 iter 45: train loss 2.71707. lr 2.695312e-04:   0%|          | 46/111539 [00:07<5:28:47,  5.65it/s]
+
+below warmup. lr mult:  0.439453125
+lr:  0.00026367187499999996
+below warmup. lr mult:  0.44921875
+lr:  0.00026953124999999997
+
+epoch 1 iter 47: train loss 2.77445. lr 2.812500e-04:   0%|          | 48/111539 [00:07<5:06:04,  6.07it/s]
+
+below warmup. lr mult:  0.458984375
+lr:  0.000275390625
+below warmup. lr mult:  0.46875
+lr:  0.00028125
+
+epoch 1 iter 49: train loss 2.91247. lr 2.929687e-04:   0%|          | 50/111539 [00:08<5:28:52,  5.65it/s]
+
+below warmup. lr mult:  0.478515625
+lr:  0.000287109375
+below warmup. lr mult:  0.48828125
+lr:  0.00029296875
+
+epoch 1 iter 51: train loss 2.82487. lr 3.046875e-04:   0%|          | 52/111539 [00:08<4:57:45,  6.24it/s]
+
+below warmup. lr mult:  0.498046875
+lr:  0.000298828125
+below warmup. lr mult:  0.5078125
+lr:  0.0003046875
+
+epoch 1 iter 53: train loss 2.79935. lr 3.164062e-04:   0%|          | 54/111539 [00:08<4:53:54,  6.32it/s]
+
+below warmup. lr mult:  0.517578125
+lr:  0.00031054687499999995
+below warmup. lr mult:  0.52734375
+lr:  0.00031640624999999996
+
+epoch 1 iter 55: train loss 2.79942. lr 3.281250e-04:   0%|          | 56/111539 [00:09<4:59:03,  6.21it/s]
+
+below warmup. lr mult:  0.537109375
+lr:  0.00032226562499999996
+below warmup. lr mult:  0.546875
+lr:  0.00032812499999999997
+
+epoch 1 iter 57: train loss 2.92946. lr 3.398437e-04:   0%|          | 58/111539 [00:09<5:09:12,  6.01it/s]
+
+below warmup. lr mult:  0.556640625
+lr:  0.00033398437499999997
+below warmup. lr mult:  0.56640625
+lr:  0.00033984375
+
+epoch 1 iter 59: train loss 2.87690. lr 3.515625e-04:   0%|          | 60/111539 [00:09<5:08:27,  6.02it/s]
+
+below warmup. lr mult:  0.576171875
+lr:  0.000345703125
+below warmup. lr mult:  0.5859375
+lr:  0.0003515625
+
+epoch 1 iter 61: train loss 2.57321. lr 3.632812e-04:   0%|          | 62/111539 [00:10<5:15:55,  5.88it/s]
+
+below warmup. lr mult:  0.595703125
+lr:  0.000357421875
+below warmup. lr mult:  0.60546875
+lr:  0.00036328124999999994
+
+epoch 1 iter 63: train loss 2.53872. lr 3.750000e-04:   0%|          | 64/111539 [00:10<4:59:25,  6.20it/s]
+
+below warmup. lr mult:  0.615234375
+lr:  0.00036914062499999995
+below warmup. lr mult:  0.625
+lr:  0.00037499999999999995
+
+epoch 1 iter 65: train loss 2.82867. lr 3.867187e-04:   0%|          | 66/111539 [00:10<5:15:07,  5.90it/s]
+
+below warmup. lr mult:  0.634765625
+lr:  0.00038085937499999996
+below warmup. lr mult:  0.64453125
+lr:  0.00038671874999999996
+
+epoch 1 iter 67: train loss 2.84603. lr 3.984375e-04:   0%|          | 68/111539 [00:11<4:58:05,  6.23it/s]
+
+below warmup. lr mult:  0.654296875
+lr:  0.00039257812499999997
+below warmup. lr mult:  0.6640625
+lr:  0.0003984375
+
+epoch 1 iter 69: train loss 2.85480. lr 4.101562e-04:   0%|          | 70/111539 [00:11<4:59:13,  6.21it/s]
+
+below warmup. lr mult:  0.673828125
+lr:  0.000404296875
+below warmup. lr mult:  0.68359375
+lr:  0.00041015625
+
+epoch 1 iter 71: train loss 2.72714. lr 4.218750e-04:   0%|          | 72/111539 [00:11<5:00:14,  6.19it/s]
+
+below warmup. lr mult:  0.693359375
+lr:  0.000416015625
+below warmup. lr mult:  0.703125
+lr:  0.00042187499999999994
+
+epoch 1 iter 73: train loss 2.71436. lr 4.335937e-04:   0%|          | 74/111539 [00:12<5:01:08,  6.17it/s]
+
+below warmup. lr mult:  0.712890625
+lr:  0.00042773437499999995
+below warmup. lr mult:  0.72265625
+lr:  0.00043359374999999995
+
+epoch 1 iter 75: train loss 3.04507. lr 4.453125e-04:   0%|          | 76/111539 [00:12<4:56:04,  6.27it/s]
+
+below warmup. lr mult:  0.732421875
+lr:  0.00043945312499999996
+below warmup. lr mult:  0.7421875
+lr:  0.00044531249999999996
+
+epoch 1 iter 77: train loss 2.88025. lr 4.570312e-04:   0%|          | 78/111539 [00:12<5:01:12,  6.17it/s]
+
+below warmup. lr mult:  0.751953125
+lr:  0.00045117187499999997
+below warmup. lr mult:  0.76171875
+lr:  0.00045703124999999997
+
+epoch 1 iter 79: train loss 2.72873. lr 4.687500e-04:   0%|          | 80/111539 [00:13<5:07:34,  6.04it/s]
+
+below warmup. lr mult:  0.771484375
+lr:  0.000462890625
+below warmup. lr mult:  0.78125
+lr:  0.00046875
+
+epoch 1 iter 81: train loss 2.77081. lr 4.804687e-04:   0%|          | 82/111539 [00:13<5:04:03,  6.11it/s]
+
+below warmup. lr mult:  0.791015625
+lr:  0.00047460937499999993
+below warmup. lr mult:  0.80078125
+lr:  0.00048046874999999994
+
+epoch 1 iter 83: train loss 2.56248. lr 4.921875e-04:   0%|          | 84/111539 [00:13<4:54:51,  6.30it/s]
+
+below warmup. lr mult:  0.810546875
+lr:  0.00048632812499999994
+below warmup. lr mult:  0.8203125
+lr:  0.0004921875
+
+epoch 1 iter 85: train loss 2.78765. lr 5.039062e-04:   0%|          | 86/111539 [00:14<4:54:25,  6.31it/s]
+
+below warmup. lr mult:  0.830078125
+lr:  0.000498046875
+below warmup. lr mult:  0.83984375
+lr:  0.0005039062499999999
+
+epoch 1 iter 87: train loss 2.86678. lr 5.156250e-04:   0%|          | 88/111539 [00:14<5:00:00,  6.19it/s]
+
+below warmup. lr mult:  0.849609375
+lr:  0.0005097656249999999
+below warmup. lr mult:  0.859375
+lr:  0.0005156249999999999
+
+epoch 1 iter 89: train loss 2.74127. lr 5.273437e-04:   0%|          | 90/111539 [00:14<4:50:38,  6.39it/s]
+
+below warmup. lr mult:  0.869140625
+lr:  0.0005214843749999999
+below warmup. lr mult:  0.87890625
+lr:  0.0005273437499999999
+
+epoch 1 iter 91: train loss 2.91782. lr 5.390625e-04:   0%|          | 92/111539 [00:15<4:55:37,  6.28it/s]
+
+below warmup. lr mult:  0.888671875
+lr:  0.0005332031249999999
+below warmup. lr mult:  0.8984375
+lr:  0.0005390624999999999
+
+epoch 1 iter 93: train loss 2.68584. lr 5.507812e-04:   0%|          | 94/111539 [00:15<4:46:35,  6.48it/s]
+
+below warmup. lr mult:  0.908203125
+lr:  0.0005449218749999999
+below warmup. lr mult:  0.91796875
+lr:  0.00055078125
+
+epoch 1 iter 95: train loss 2.61467. lr 5.625000e-04:   0%|          | 96/111539 [00:15<4:41:49,  6.59it/s]
+
+below warmup. lr mult:  0.927734375
+lr:  0.000556640625
+below warmup. lr mult:  0.9375
+lr:  0.0005625
+
+epoch 1 iter 97: train loss 2.49055. lr 5.742187e-04:   0%|          | 98/111539 [00:16<5:03:54,  6.11it/s]
+
+below warmup. lr mult:  0.947265625
+lr:  0.000568359375
+below warmup. lr mult:  0.95703125
+lr:  0.00057421875
+
+epoch 1 iter 99: train loss 2.79765. lr 5.859375e-04:   0%|          | 100/111539 [00:16<5:19:44,  5.81it/s]
+
+below warmup. lr mult:  0.966796875
+lr:  0.000580078125
+below warmup. lr mult:  0.9765625
+lr:  0.0005859375
+
+epoch 1 iter 101: train loss 2.79086. lr 5.976562e-04:   0%|          | 102/111539 [00:16<5:22:50,  5.75it/s]
+
+below warmup. lr mult:  0.986328125
+lr:  0.000591796875
+below warmup. lr mult:  0.99609375
+lr:  0.00059765625
+
+epoch 1 iter 103: train loss 2.85008. lr 6.000000e-04:   0%|          | 104/111539 [00:17<5:22:20,  5.76it/s]
+
+afte wramup warmup. lr mult:  0.9999999999821338
+lr:  0.0005999999999892802
+afte wramup warmup. lr mult:  0.9999999998729514
+lr:  0.0005999999999237708
+
+epoch 1 iter 104: train loss 2.60753. lr 6.000000e-04:   0%|          | 105/111539 [00:17<5:10:09,  5.99it/s]
+
+afte wramup warmup. lr mult:  0.9999999996645124
+lr:  0.0005999999997987074
+
+epoch 1 iter 106: train loss 2.76781. lr 6.000000e-04:   0%|          | 107/111539 [00:17<5:23:24,  5.74it/s]
+
+afte wramup warmup. lr mult:  0.9999999993568167
+lr:  0.00059999999961409
+afte wramup warmup. lr mult:  0.9999999989498644
+lr:  0.0005999999993699186
+
+epoch 1 iter 108: train loss 2.78510. lr 6.000000e-04:   0%|          | 109/111539 [00:17<5:11:03,  5.97it/s]
+
+afte wramup warmup. lr mult:  0.9999999984436553
+lr:  0.0005999999990661931
+afte wramup warmup. lr mult:  0.9999999978381895
+lr:  0.0005999999987029136
+
+epoch 1 iter 110: train loss 2.42418. lr 6.000000e-04:   0%|          | 111/111539 [00:18<4:57:01,  6.25it/s]
+
+afte wramup warmup. lr mult:  0.9999999971334671
+lr:  0.0005999999982800802
+afte wramup warmup. lr mult:  0.999999996329488
+lr:  0.0005999999977976927
+
+epoch 1 iter 112: train loss 2.74661. lr 6.000000e-04:   0%|          | 113/111539 [00:18<4:57:02,  6.25it/s]
+
+afte wramup warmup. lr mult:  0.9999999954262522
+lr:  0.0005999999972557512
+afte wramup warmup. lr mult:  0.9999999944237598
+lr:  0.0005999999966542558
+
+epoch 1 iter 114: train loss 2.82823. lr 6.000000e-04:   0%|          | 115/111539 [00:18<4:46:35,  6.48it/s]
+
+afte wramup warmup. lr mult:  0.9999999933220106
+lr:  0.0005999999959932064
+afte wramup warmup. lr mult:  0.9999999921210048
+lr:  0.0005999999952726028
+
+epoch 1 iter 116: train loss 2.60776. lr 6.000000e-04:   0%|          | 117/111539 [00:19<4:41:43,  6.59it/s]
+
+afte wramup warmup. lr mult:  0.9999999908207423
+lr:  0.0005999999944924454
+afte wramup warmup. lr mult:  0.9999999894212231
+lr:  0.0005999999936527338
+
+epoch 1 iter 118: train loss 2.80834. lr 6.000000e-04:   0%|          | 119/111539 [00:19<4:46:15,  6.49it/s]
+
+afte wramup warmup. lr mult:  0.9999999879224473
+lr:  0.0005999999927534683
+afte wramup warmup. lr mult:  0.9999999863244148
+lr:  0.0005999999917946488
+
+epoch 1 iter 120: train loss 2.61712. lr 6.000000e-04:   0%|          | 121/111539 [00:19<5:02:47,  6.13it/s]
+
+afte wramup warmup. lr mult:  0.9999999846271256
+lr:  0.0005999999907762753
+afte wramup warmup. lr mult:  0.9999999828305797
+lr:  0.0005999999896983477
+
+epoch 1 iter 122: train loss 2.30482. lr 6.000000e-04:   0%|          | 123/111539 [00:20<4:58:11,  6.23it/s]
+
+afte wramup warmup. lr mult:  0.9999999809347772
+lr:  0.0005999999885608662
+afte wramup warmup. lr mult:  0.9999999789397179
+lr:  0.0005999999873638307
+
+epoch 1 iter 124: train loss 2.73373. lr 6.000000e-04:   0%|          | 125/111539 [00:20<4:56:13,  6.27it/s]
+
+afte wramup warmup. lr mult:  0.999999976845402
+lr:  0.0005999999861072412
+afte wramup warmup. lr mult:  0.9999999746518294
+lr:  0.0005999999847910976
+
+epoch 1 iter 126: train loss 2.57272. lr 6.000000e-04:   0%|          | 127/111539 [00:20<5:03:52,  6.11it/s]
+
+afte wramup warmup. lr mult:  0.9999999723590002
+lr:  0.0005999999834154
+afte wramup warmup. lr mult:  0.9999999699669142
+lr:  0.0005999999819801485
+
+epoch 1 iter 128: train loss 2.93601. lr 6.000000e-04:   0%|          | 129/111539 [00:21<5:01:41,  6.15it/s]
+
+afte wramup warmup. lr mult:  0.9999999674755717
+lr:  0.000599999980485343
+afte wramup warmup. lr mult:  0.9999999648849724
+lr:  0.0005999999789309834
+
+epoch 1 iter 130: train loss 2.79464. lr 6.000000e-04:   0%|          | 131/111539 [00:21<5:07:37,  6.04it/s]
+
+afte wramup warmup. lr mult:  0.9999999621951164
+lr:  0.0005999999773170698
+afte wramup warmup. lr mult:  0.9999999594060038
+lr:  0.0005999999756436023
+
+epoch 1 iter 132: train loss 2.64181. lr 6.000000e-04:   0%|          | 133/111539 [00:21<4:59:23,  6.20it/s]
+
+afte wramup warmup. lr mult:  0.9999999565176345
+lr:  0.0005999999739105807
+afte wramup warmup. lr mult:  0.9999999535300086
+lr:  0.0005999999721180051
+
+epoch 1 iter 134: train loss 2.56823. lr 6.000000e-04:   0%|          | 135/111539 [00:22<4:53:21,  6.33it/s]
+
+afte wramup warmup. lr mult:  0.999999950443126
+lr:  0.0005999999702658755
+afte wramup warmup. lr mult:  0.9999999472569867
+lr:  0.000599999968354192
+
+epoch 1 iter 136: train loss 2.69965. lr 6.000000e-04:   0%|          | 137/111539 [00:22<4:50:54,  6.38it/s]
+
+afte wramup warmup. lr mult:  0.9999999439715908
+lr:  0.0005999999663829544
+afte wramup warmup. lr mult:  0.999999940586938
+lr:  0.0005999999643521627
+
+epoch 1 iter 138: train loss 2.99882. lr 6.000000e-04:   0%|          | 139/111539 [00:22<5:06:06,  6.07it/s]
+
+afte wramup warmup. lr mult:  0.9999999371030288
+lr:  0.0005999999622618173
+afte wramup warmup. lr mult:  0.9999999335198628
+lr:  0.0005999999601119176
+
+epoch 1 iter 140: train loss 2.53059. lr 6.000000e-04:   0%|          | 141/111539 [00:23<5:31:51,  5.59it/s]
+
+afte wramup warmup. lr mult:  0.9999999298374401
+lr:  0.000599999957902464
+afte wramup warmup. lr mult:  0.9999999260557608
+lr:  0.0005999999556334564
+
+epoch 1 iter 142: train loss 2.59663. lr 6.000000e-04:   0%|          | 143/111539 [00:23<5:09:19,  6.00it/s]
+
+afte wramup warmup. lr mult:  0.9999999221748248
+lr:  0.0005999999533048948
+afte wramup warmup. lr mult:  0.9999999181946322
+lr:  0.0005999999509167793
+
+epoch 1 iter 144: train loss 2.96350. lr 5.999999e-04:   0%|          | 145/111539 [00:23<4:53:37,  6.32it/s]
+
+afte wramup warmup. lr mult:  0.999999914115183
+lr:  0.0005999999484691097
+afte wramup warmup. lr mult:  0.9999999099364769
+lr:  0.0005999999459618861
+
+epoch 1 iter 146: train loss 2.58878. lr 5.999999e-04:   0%|          | 147/111539 [00:24<4:46:57,  6.47it/s]
+
+afte wramup warmup. lr mult:  0.9999999056585144
+lr:  0.0005999999433951086
+afte wramup warmup. lr mult:  0.999999901281295
+lr:  0.0005999999407687769
+
+epoch 1 iter 148: train loss 2.71632. lr 5.999999e-04:   0%|          | 149/111539 [00:24<4:43:51,  6.54it/s]
+
+afte wramup warmup. lr mult:  0.9999998968048192
+lr:  0.0005999999380828915
+afte wramup warmup. lr mult:  0.9999998922290865
+lr:  0.0005999999353374518
+
+epoch 1 iter 150: train loss 2.53795. lr 5.999999e-04:   0%|          | 151/111539 [00:24<4:40:56,  6.61it/s]
+
+afte wramup warmup. lr mult:  0.9999998875540973
+lr:  0.0005999999325324583
+afte wramup warmup. lr mult:  0.9999998827798513
+lr:  0.0005999999296679107
+
+epoch 1 iter 152: train loss 2.61619. lr 5.999999e-04:   0%|          | 153/111539 [00:24<5:01:50,  6.15it/s]
+
+afte wramup warmup. lr mult:  0.9999998779063488
+lr:  0.0005999999267438092
+afte wramup warmup. lr mult:  0.9999998729335896
+lr:  0.0005999999237601537
+
+epoch 1 iter 154: train loss 2.89616. lr 5.999999e-04:   0%|          | 155/111539 [00:25<4:53:58,  6.31it/s]
+
+afte wramup warmup. lr mult:  0.9999998678615737
+lr:  0.0005999999207169441
+afte wramup warmup. lr mult:  0.9999998626903012
+lr:  0.0005999999176141806
+
+epoch 1 iter 156: train loss 2.38681. lr 5.999999e-04:   0%|          | 157/111539 [00:25<4:55:32,  6.28it/s]
+
+afte wramup warmup. lr mult:  0.9999998574197719
+lr:  0.0005999999144518631
+afte wramup warmup. lr mult:  0.9999998520499862
+lr:  0.0005999999112299917
+
+epoch 1 iter 158: train loss 2.68646. lr 5.999999e-04:   0%|          | 159/111539 [00:25<4:48:06,  6.44it/s]
+
+afte wramup warmup. lr mult:  0.9999998465809437
+lr:  0.0005999999079485661
+afte wramup warmup. lr mult:  0.9999998410126445
+lr:  0.0005999999046075867
+
+epoch 1 iter 160: train loss 2.69012. lr 5.999999e-04:   0%|          | 161/111539 [00:26<4:46:45,  6.47it/s]
+
+afte wramup warmup. lr mult:  0.9999998353450887
+lr:  0.0005999999012070531
+afte wramup warmup. lr mult:  0.9999998295782764
+lr:  0.0005999998977469658
+
+epoch 1 iter 162: train loss 2.40028. lr 5.999999e-04:   0%|          | 163/111539 [00:26<4:48:18,  6.44it/s]
+
+afte wramup warmup. lr mult:  0.9999998237122072
+lr:  0.0005999998942273243
+afte wramup warmup. lr mult:  0.9999998177468815
+lr:  0.0005999998906481289
+
+epoch 1 iter 164: train loss 2.48066. lr 5.999999e-04:   0%|          | 165/111539 [00:26<4:42:55,  6.56it/s]
+
+afte wramup warmup. lr mult:  0.9999998116822992
+lr:  0.0005999998870093795
+afte wramup warmup. lr mult:  0.9999998055184602
+lr:  0.0005999998833110761
+
+epoch 1 iter 166: train loss 2.76997. lr 5.999999e-04:   0%|          | 167/111539 [00:27<4:40:41,  6.61it/s]
+
+afte wramup warmup. lr mult:  0.9999997992553645
+lr:  0.0005999998795532187
+afte wramup warmup. lr mult:  0.9999997928930122
+lr:  0.0005999998757358073
+
+epoch 1 iter 168: train loss 2.62859. lr 5.999999e-04:   0%|          | 169/111539 [00:27<4:44:31,  6.52it/s]
+
+afte wramup warmup. lr mult:  0.9999997864314033
+lr:  0.0005999998718588419
+afte wramup warmup. lr mult:  0.9999997798705378
+lr:  0.0005999998679223226
+
+epoch 1 iter 170: train loss 2.64415. lr 5.999999e-04:   0%|          | 171/111539 [00:27<4:38:46,  6.66it/s]
+
+afte wramup warmup. lr mult:  0.9999997732104156
+lr:  0.0005999998639262493
+afte wramup warmup. lr mult:  0.9999997664510367
+lr:  0.000599999859870622
+
+epoch 1 iter 172: train loss 2.87954. lr 5.999999e-04:   0%|          | 173/111539 [00:28<4:38:58,  6.65it/s]
+
+afte wramup warmup. lr mult:  0.9999997595924013
+lr:  0.0005999998557554407
+afte wramup warmup. lr mult:  0.9999997526345092
+lr:  0.0005999998515807055
+
+epoch 1 iter 174: train loss 2.34807. lr 5.999998e-04:   0%|          | 175/111539 [00:28<4:39:51,  6.63it/s]
+
+afte wramup warmup. lr mult:  0.9999997455773605
+lr:  0.0005999998473464163
+afte wramup warmup. lr mult:  0.9999997384209551
+lr:  0.000599999843052573
+
+epoch 1 iter 176: train loss 2.56965. lr 5.999998e-04:   0%|          | 177/111539 [00:28<5:16:18,  5.87it/s]
+
+afte wramup warmup. lr mult:  0.9999997311652931
+lr:  0.0005999998386991758
+afte wramup warmup. lr mult:  0.9999997238103746
+lr:  0.0005999998342862247
+
+epoch 1 iter 178: train loss 2.57149. lr 5.999998e-04:   0%|          | 179/111539 [00:29<5:09:00,  6.01it/s]
+
+afte wramup warmup. lr mult:  0.9999997163561993
+lr:  0.0005999998298137195
+afte wramup warmup. lr mult:  0.9999997088027675
+lr:  0.0005999998252816604
+
+epoch 1 iter 180: train loss 2.69309. lr 5.999998e-04:   0%|          | 181/111539 [00:29<5:00:04,  6.18it/s]
+
+afte wramup warmup. lr mult:  0.999999701150079
+lr:  0.0005999998206900473
+afte wramup warmup. lr mult:  0.9999996933981339
+lr:  0.0005999998160388803
+
+epoch 1 iter 182: train loss 2.60068. lr 5.999998e-04:   0%|          | 183/111539 [00:29<4:54:25,  6.30it/s]
+
+afte wramup warmup. lr mult:  0.9999996855469322
+lr:  0.0005999998113281592
+afte wramup warmup. lr mult:  0.9999996775964739
+lr:  0.0005999998065578843
+
+epoch 1 iter 184: train loss 2.60602. lr 5.999998e-04:   0%|          | 185/111539 [00:30<5:03:38,  6.11it/s]
+
+afte wramup warmup. lr mult:  0.9999996695467589
+lr:  0.0005999998017280553
+afte wramup warmup. lr mult:  0.9999996613977873
+lr:  0.0005999997968386723
+
+epoch 1 iter 186: train loss 2.56165. lr 5.999998e-04:   0%|          | 187/111539 [00:30<5:02:38,  6.13it/s]
+
+afte wramup warmup. lr mult:  0.9999996531495592
+lr:  0.0005999997918897355
+afte wramup warmup. lr mult:  0.9999996448020744
+lr:  0.0005999997868812446
+
+epoch 1 iter 188: train loss 2.76609. lr 5.999998e-04:   0%|          | 189/111539 [00:30<5:03:42,  6.11it/s]
+
+afte wramup warmup. lr mult:  0.999999636355333
+lr:  0.0005999997818131997
+afte wramup warmup. lr mult:  0.999999627809335
+lr:  0.000599999776685601
+
+epoch 1 iter 190: train loss 2.44819. lr 5.999998e-04:   0%|          | 191/111539 [00:31<5:12:56,  5.93it/s]
+
+afte wramup warmup. lr mult:  0.9999996191640803
+lr:  0.0005999997714984482
+afte wramup warmup. lr mult:  0.9999996104195692
+lr:  0.0005999997662517415
+
+epoch 1 iter 192: train loss 2.53397. lr 5.999998e-04:   0%|          | 193/111539 [00:31<5:12:34,  5.94it/s]
+
+afte wramup warmup. lr mult:  0.9999996015758014
+lr:  0.0005999997609454808
+afte wramup warmup. lr mult:  0.9999995926327769
+lr:  0.0005999997555796661
+
+epoch 1 iter 194: train loss 2.42943. lr 5.999997e-04:   0%|          | 195/111539 [00:31<5:13:26,  5.92it/s]
+
+afte wramup warmup. lr mult:  0.999999583590496
+lr:  0.0005999997501542976
+afte wramup warmup. lr mult:  0.9999995744489584
+lr:  0.0005999997446693749
+
+epoch 1 iter 196: train loss 2.62639. lr 5.999997e-04:   0%|          | 197/111539 [00:32<5:00:36,  6.17it/s]
+
+afte wramup warmup. lr mult:  0.9999995652081641
+lr:  0.0005999997391248985
+afte wramup warmup. lr mult:  0.9999995558681134
+lr:  0.000599999733520868
+
+epoch 1 iter 198: train loss 2.37947. lr 5.999997e-04:   0%|          | 199/111539 [00:32<5:20:10,  5.80it/s]
+
+afte wramup warmup. lr mult:  0.999999546428806
+lr:  0.0005999997278572835
+afte wramup warmup. lr mult:  0.999999536890242
+lr:  0.0005999997221341452
+
+epoch 1 iter 200: train loss 2.78239. lr 5.999997e-04:   0%|          | 201/111539 [00:32<5:24:36,  5.72it/s]
+
+afte wramup warmup. lr mult:  0.9999995272524214
+lr:  0.0005999997163514528
+afte wramup warmup. lr mult:  0.9999995175153442
+lr:  0.0005999997105092065
+
+epoch 1 iter 202: train loss 2.43286. lr 5.999997e-04:   0%|          | 203/111539 [00:33<5:12:51,  5.93it/s]
+
+afte wramup warmup. lr mult:  0.9999995076790106
+lr:  0.0005999997046074063
+afte wramup warmup. lr mult:  0.9999994977434202
+lr:  0.0005999996986460521
+
+epoch 1 iter 204: train loss 2.39526. lr 5.999997e-04:   0%|          | 205/111539 [00:33<5:04:00,  6.10it/s]
+
+afte wramup warmup. lr mult:  0.9999994877085734
+lr:  0.000599999692625144
+afte wramup warmup. lr mult:  0.9999994775744698
+lr:  0.0005999996865446818
+
+epoch 1 iter 206: train loss 2.64033. lr 5.999997e-04:   0%|          | 207/111539 [00:33<5:07:59,  6.02it/s]
+
+afte wramup warmup. lr mult:  0.9999994673411099
+lr:  0.0005999996804046659
+afte wramup warmup. lr mult:  0.9999994570084932
+lr:  0.0005999996742050959
+
+epoch 1 iter 208: train loss 2.65554. lr 5.999997e-04:   0%|          | 209/111539 [00:34<5:21:27,  5.77it/s]
+
+afte wramup warmup. lr mult:  0.99999944657662
+lr:  0.0005999996679459719
+afte wramup warmup. lr mult:  0.9999994360454902
+lr:  0.0005999996616272941
+
+epoch 1 iter 210: train loss 2.53461. lr 5.999996e-04:   0%|          | 211/111539 [00:34<5:22:28,  5.75it/s]
+
+afte wramup warmup. lr mult:  0.9999994254151039
+lr:  0.0005999996552490623
+afte wramup warmup. lr mult:  0.999999414685461
+lr:  0.0005999996488112766
+
+epoch 1 iter 212: train loss 2.84097. lr 5.999996e-04:   0%|          | 213/111539 [00:34<5:12:42,  5.93it/s]
+
+afte wramup warmup. lr mult:  0.9999994038565616
+lr:  0.0005999996423139369
+afte wramup warmup. lr mult:  0.9999993929284057
+lr:  0.0005999996357570434
+
+epoch 1 iter 214: train loss 2.60565. lr 5.999996e-04:   0%|          | 215/111539 [00:35<5:06:15,  6.06it/s]
+
+afte wramup warmup. lr mult:  0.999999381900993
+lr:  0.0005999996291405958
+afte wramup warmup. lr mult:  0.9999993707743239
+lr:  0.0005999996224645942
+
+epoch 1 iter 216: train loss 2.58984. lr 5.999996e-04:   0%|          | 217/111539 [00:35<5:03:15,  6.12it/s]
+
+afte wramup warmup. lr mult:  0.9999993595483982
+lr:  0.0005999996157290389
+afte wramup warmup. lr mult:  0.9999993482232159
+lr:  0.0005999996089339295
+
+epoch 1 iter 218: train loss 2.62355. lr 5.999996e-04:   0%|          | 219/111539 [00:35<5:10:46,  5.97it/s]
+
+afte wramup warmup. lr mult:  0.9999993367987772
+lr:  0.0005999996020792663
+afte wramup warmup. lr mult:  0.9999993252750818
+lr:  0.000599999595165049
+
+epoch 1 iter 220: train loss 2.61579. lr 5.999996e-04:   0%|          | 221/111539 [00:36<5:02:22,  6.14it/s]
+
+afte wramup warmup. lr mult:  0.9999993136521299
+lr:  0.0005999995881912778
+afte wramup warmup. lr mult:  0.9999993019299216
+lr:  0.0005999995811579529
+
+epoch 1 iter 221: train loss 2.34044. lr 5.999996e-04:   0%|          | 222/111539 [00:36<5:03:24,  6.11it/s]
+
+afte wramup warmup. lr mult:  0.9999992901084566
+lr:  0.0005999995740650738
+afte wramup warmup. lr mult:  0.999999278187735
+lr:  0.000599999566912641
+
+epoch 1 iter 224: train loss 2.60230. lr 5.999996e-04:   0%|          | 225/111539 [00:36<5:03:52,  6.11it/s]
+
+afte wramup warmup. lr mult:  0.999999266167757
+lr:  0.0005999995597006541
+afte wramup warmup. lr mult:  0.9999992540485225
+lr:  0.0005999995524291135
+
+epoch 1 iter 226: train loss 2.61938. lr 5.999995e-04:   0%|          | 227/111539 [00:37<5:00:44,  6.17it/s]
+
+afte wramup warmup. lr mult:  0.9999992418300314
+lr:  0.0005999995450980188
+afte wramup warmup. lr mult:  0.9999992295122837
+lr:  0.0005999995377073702
+
+epoch 1 iter 228: train loss 2.51185. lr 5.999995e-04:   0%|          | 229/111539 [00:37<4:59:46,  6.19it/s]
+
+afte wramup warmup. lr mult:  0.9999992170952796
+lr:  0.0005999995302571678
+afte wramup warmup. lr mult:  0.9999992045790189
+lr:  0.0005999995227474113
+
+epoch 1 iter 230: train loss 2.55911. lr 5.999995e-04:   0%|          | 231/111539 [00:37<4:59:03,  6.20it/s]
+
+afte wramup warmup. lr mult:  0.9999991919635016
+lr:  0.000599999515178101
+afte wramup warmup. lr mult:  0.9999991792487279
+lr:  0.0005999995075492367
+
+epoch 1 iter 232: train loss 2.53483. lr 5.999995e-04:   0%|          | 233/111539 [00:38<5:08:30,  6.01it/s]
+
+afte wramup warmup. lr mult:  0.9999991664346977
+lr:  0.0005999994998608186
+afte wramup warmup. lr mult:  0.999999153521411
+lr:  0.0005999994921128465
+
+epoch 1 iter 234: train loss 2.62385. lr 5.999995e-04:   0%|          | 235/111539 [00:38<5:11:07,  5.96it/s]
+
+afte wramup warmup. lr mult:  0.9999991405088677
+lr:  0.0005999994843053206
+afte wramup warmup. lr mult:  0.9999991273970679
+lr:  0.0005999994764382407
+
+epoch 1 iter 236: train loss 2.47082. lr 5.999995e-04:   0%|          | 237/111539 [00:38<5:04:40,  6.09it/s]
+
+afte wramup warmup. lr mult:  0.9999991141860116
+lr:  0.0005999994685116069
+afte wramup warmup. lr mult:  0.9999991008756988
+lr:  0.0005999994605254192
+
+epoch 1 iter 238: train loss 2.60880. lr 5.999994e-04:   0%|          | 239/111539 [00:39<5:17:31,  5.84it/s]
+
+afte wramup warmup. lr mult:  0.9999990874661295
+lr:  0.0005999994524796777
+afte wramup warmup. lr mult:  0.9999990739573037
+lr:  0.0005999994443743822
+
+epoch 1 iter 240: train loss 2.45356. lr 5.999994e-04:   0%|          | 241/111539 [00:39<5:06:06,  6.06it/s]
+
+afte wramup warmup. lr mult:  0.9999990603492215
+lr:  0.0005999994362095328
+afte wramup warmup. lr mult:  0.9999990466418827
+lr:  0.0005999994279851296
+
+epoch 1 iter 242: train loss 2.61647. lr 5.999994e-04:   0%|          | 243/111539 [00:39<5:13:15,  5.92it/s]
+
+afte wramup warmup. lr mult:  0.9999990328352875
+lr:  0.0005999994197011724
+afte wramup warmup. lr mult:  0.9999990189294357
+lr:  0.0005999994113576613
+
+epoch 1 iter 244: train loss 2.42428. lr 5.999994e-04:   0%|          | 245/111539 [00:40<5:28:45,  5.64it/s]
+
+afte wramup warmup. lr mult:  0.9999990049243275
+lr:  0.0005999994029545964
+afte wramup warmup. lr mult:  0.9999989908199627
+lr:  0.0005999993944919775
+
+epoch 1 iter 246: train loss 2.55987. lr 5.999994e-04:   0%|          | 247/111539 [00:40<5:12:22,  5.94it/s]
+
+afte wramup warmup. lr mult:  0.9999989766163415
+lr:  0.0005999993859698049
+afte wramup warmup. lr mult:  0.999998962313464
+lr:  0.0005999993773880783
+
+epoch 1 iter 248: train loss 2.81478. lr 5.999994e-04:   0%|          | 249/111539 [00:40<5:13:15,  5.92it/s]
+
+afte wramup warmup. lr mult:  0.9999989479113298
+lr:  0.0005999993687467978
+afte wramup warmup. lr mult:  0.9999989334099391
+lr:  0.0005999993600459634
+
+epoch 1 iter 250: train loss 2.70647. lr 5.999993e-04:   0%|          | 251/111539 [00:41<5:18:25,  5.82it/s]
+
+afte wramup warmup. lr mult:  0.999998918809292
+lr:  0.0005999993512855752
+afte wramup warmup. lr mult:  0.9999989041093885
+lr:  0.000599999342465633
+
+epoch 1 iter 252: train loss 2.52148. lr 5.999993e-04:   0%|          | 253/111539 [00:41<4:57:57,  6.22it/s]
+
+afte wramup warmup. lr mult:  0.9999988893102285
+lr:  0.000599999333586137
+afte wramup warmup. lr mult:  0.999998874411812
+lr:  0.0005999993246470871
+
+epoch 1 iter 254: train loss 2.74302. lr 5.999993e-04:   0%|          | 255/111539 [00:41<4:48:45,  6.42it/s]
+
+afte wramup warmup. lr mult:  0.9999988594141391
+lr:  0.0005999993156484834
+afte wramup warmup. lr mult:  0.9999988443172096
+lr:  0.0005999993065903258
+
+epoch 1 iter 256: train loss 2.70108. lr 5.999993e-04:   0%|          | 257/111539 [00:42<5:01:51,  6.14it/s]
+
+afte wramup warmup. lr mult:  0.9999988291210239
+lr:  0.0005999992974726143
+afte wramup warmup. lr mult:  0.9999988138255816
+lr:  0.0005999992882953489
+
+epoch 1 iter 258: train loss 2.64036. lr 5.999993e-04:   0%|          | 259/111539 [00:42<5:06:16,  6.06it/s]
+
+afte wramup warmup. lr mult:  0.9999987984308829
+lr:  0.0005999992790585297
+afte wramup warmup. lr mult:  0.9999987829369277
+lr:  0.0005999992697621566
+
+epoch 1 iter 260: train loss 2.74048. lr 5.999993e-04:   0%|          | 261/111539 [00:42<4:53:06,  6.33it/s]
+
+afte wramup warmup. lr mult:  0.9999987673437161
+lr:  0.0005999992604062296
+afte wramup warmup. lr mult:  0.9999987516512481
+lr:  0.0005999992509907488
+
+epoch 1 iter 262: train loss 2.65081. lr 5.999992e-04:   0%|          | 263/111539 [00:43<4:59:46,  6.19it/s]
+
+afte wramup warmup. lr mult:  0.9999987358595237
+lr:  0.0005999992415157142
+afte wramup warmup. lr mult:  0.9999987199685427
+lr:  0.0005999992319811255
+
+epoch 1 iter 264: train loss 2.48759. lr 5.999992e-04:   0%|          | 265/111539 [00:43<4:45:48,  6.49it/s]
+
+afte wramup warmup. lr mult:  0.9999987039783054
+lr:  0.0005999992223869832
+afte wramup warmup. lr mult:  0.9999986878888116
+lr:  0.000599999212733287
+
+epoch 1 iter 266: train loss 2.55584. lr 5.999992e-04:   0%|          | 267/111539 [00:43<4:44:24,  6.52it/s]
+
+afte wramup warmup. lr mult:  0.9999986717000615
+lr:  0.0005999992030200368
+afte wramup warmup. lr mult:  0.999998655412055
+lr:  0.0005999991932472329
+
+epoch 1 iter 268: train loss 2.32092. lr 5.999992e-04:   0%|          | 269/111539 [00:44<5:08:24,  6.01it/s]
+
+afte wramup warmup. lr mult:  0.9999986390247919
+lr:  0.0005999991834148751
+afte wramup warmup. lr mult:  0.9999986225382727
+lr:  0.0005999991735229635
+
+epoch 1 iter 270: train loss 2.51967. lr 5.999992e-04:   0%|          | 271/111539 [00:44<5:01:34,  6.15it/s]
+
+afte wramup warmup. lr mult:  0.9999986059524968
+lr:  0.000599999163571498
+afte wramup warmup. lr mult:  0.9999985892674645
+lr:  0.0005999991535604787
+
+epoch 1 iter 272: train loss 2.55732. lr 5.999991e-04:   0%|          | 273/111539 [00:44<4:53:56,  6.31it/s]
+
+afte wramup warmup. lr mult:  0.9999985724831759
+lr:  0.0005999991434899055
+afte wramup warmup. lr mult:  0.9999985555996309
+lr:  0.0005999991333597784
+
+epoch 1 iter 274: train loss 2.50026. lr 5.999991e-04:   0%|          | 275/111539 [00:44<4:45:04,  6.50it/s]
+
+afte wramup warmup. lr mult:  0.9999985386168295
+lr:  0.0005999991231700976
+afte wramup warmup. lr mult:  0.9999985215347718
+lr:  0.000599999112920863
+
+epoch 1 iter 276: train loss 2.65728. lr 5.999991e-04:   0%|          | 277/111539 [00:45<4:48:53,  6.42it/s]
+
+afte wramup warmup. lr mult:  0.9999985043534576
+lr:  0.0005999991026120745
+afte wramup warmup. lr mult:  0.9999984870728871
+lr:  0.0005999990922437322
+
+epoch 1 iter 278: train loss 2.54171. lr 5.999991e-04:   0%|          | 279/111539 [00:45<4:49:14,  6.41it/s]
+
+afte wramup warmup. lr mult:  0.9999984696930602
+lr:  0.000599999081815836
+afte wramup warmup. lr mult:  0.9999984522139769
+lr:  0.0005999990713283861
+
+epoch 1 iter 280: train loss 2.54006. lr 5.999991e-04:   0%|          | 281/111539 [00:45<4:44:10,  6.53it/s]
+
+afte wramup warmup. lr mult:  0.9999984346356372
+lr:  0.0005999990607813822
+afte wramup warmup. lr mult:  0.9999984169580411
+lr:  0.0005999990501748246
+
+epoch 1 iter 282: train loss 2.27341. lr 5.999990e-04:   0%|          | 283/111539 [00:46<4:47:51,  6.44it/s]
+
+afte wramup warmup. lr mult:  0.9999983991811887
+lr:  0.0005999990395087132
+afte wramup warmup. lr mult:  0.9999983813050799
+lr:  0.0005999990287830479
+
+epoch 1 iter 284: train loss 2.63526. lr 5.999990e-04:   0%|          | 285/111539 [00:46<4:48:04,  6.44it/s]
+
+afte wramup warmup. lr mult:  0.9999983633297148
+lr:  0.0005999990179978289
+afte wramup warmup. lr mult:  0.9999983452550933
+lr:  0.000599999007153056
+
+epoch 1 iter 286: train loss 3.02929. lr 5.999990e-04:   0%|          | 287/111539 [00:46<4:38:33,  6.66it/s]
+
+afte wramup warmup. lr mult:  0.9999983270812155
+lr:  0.0005999989962487293
+afte wramup warmup. lr mult:  0.9999983088080813
+lr:  0.0005999989852848487
+
+epoch 1 iter 288: train loss 2.64083. lr 5.999990e-04:   0%|          | 289/111539 [00:47<4:37:39,  6.68it/s]
+
+afte wramup warmup. lr mult:  0.9999982904356908
+lr:  0.0005999989742614144
+afte wramup warmup. lr mult:  0.9999982719640439
+lr:  0.0005999989631784263
+
+epoch 1 iter 290: train loss 2.56797. lr 5.999989e-04:   0%|          | 291/111539 [00:47<4:55:09,  6.28it/s]
+
+afte wramup warmup. lr mult:  0.9999982533931407
+lr:  0.0005999989520358844
+afte wramup warmup. lr mult:  0.9999982347229812
+lr:  0.0005999989408337887
+
+epoch 1 iter 292: train loss 2.54848. lr 5.999989e-04:   0%|          | 293/111539 [00:47<5:00:24,  6.17it/s]
+
+afte wramup warmup. lr mult:  0.9999982159535654
+lr:  0.0005999989295721392
+afte wramup warmup. lr mult:  0.9999981970848932
+lr:  0.0005999989182509359
+
+epoch 1 iter 294: train loss 2.53499. lr 5.999989e-04:   0%|          | 295/111539 [00:48<4:57:41,  6.23it/s]
+
+afte wramup warmup. lr mult:  0.9999981781169647
+lr:  0.0005999989068701788
+afte wramup warmup. lr mult:  0.9999981590497798
+lr:  0.0005999988954298679
+
+epoch 1 iter 296: train loss 2.36859. lr 5.999989e-04:   0%|          | 297/111539 [00:48<4:59:49,  6.18it/s]
+
+afte wramup warmup. lr mult:  0.9999981398833386
+lr:  0.0005999988839300031
+afte wramup warmup. lr mult:  0.9999981206176412
+lr:  0.0005999988723705846
+
+epoch 1 iter 298: train loss 2.47759. lr 5.999988e-04:   0%|          | 299/111539 [00:48<5:22:46,  5.74it/s]
+
+afte wramup warmup. lr mult:  0.9999981012526875
+lr:  0.0005999988607516125
+afte wramup warmup. lr mult:  0.9999980817884775
+lr:  0.0005999988490730864
+
+epoch 1 iter 300: train loss 2.62543. lr 5.999988e-04:   0%|          | 301/111539 [00:49<5:07:58,  6.02it/s]
+
+afte wramup warmup. lr mult:  0.9999980622250111
+lr:  0.0005999988373350066
+afte wramup warmup. lr mult:  0.9999980425622884
+lr:  0.000599998825537373
+
+epoch 1 iter 302: train loss 2.55254. lr 5.999988e-04:   0%|          | 303/111539 [00:49<5:02:54,  6.12it/s]
+
+afte wramup warmup. lr mult:  0.9999980228003095
+lr:  0.0005999988136801856
+afte wramup warmup. lr mult:  0.9999980029390743
+lr:  0.0005999988017634445
+
+epoch 1 iter 304: train loss 2.34907. lr 5.999988e-04:   0%|          | 305/111539 [00:49<5:04:37,  6.09it/s]
+
+afte wramup warmup. lr mult:  0.9999979829785828
+lr:  0.0005999987897871497
+afte wramup warmup. lr mult:  0.9999979629188349
+lr:  0.0005999987777513009
+
+epoch 1 iter 306: train loss 2.43306. lr 5.999988e-04:   0%|          | 307/111539 [00:50<5:02:19,  6.13it/s]
+
+afte wramup warmup. lr mult:  0.9999979427598309
+lr:  0.0005999987656558985
+afte wramup warmup. lr mult:  0.9999979225015705
+lr:  0.0005999987535009422
+
+epoch 1 iter 308: train loss 2.69522. lr 5.999987e-04:   0%|          | 309/111539 [00:50<4:50:43,  6.38it/s]
+
+afte wramup warmup. lr mult:  0.9999979021440539
+lr:  0.0005999987412864323
+afte wramup warmup. lr mult:  0.999997881687281
+lr:  0.0005999987290123685
+
+epoch 1 iter 310: train loss 2.42169. lr 5.999987e-04:   0%|          | 311/111539 [00:50<4:53:42,  6.31it/s]
+
+afte wramup warmup. lr mult:  0.9999978611312519
+lr:  0.0005999987166787511
+afte wramup warmup. lr mult:  0.9999978404759665
+lr:  0.0005999987042855799
+
+epoch 1 iter 312: train loss 2.61215. lr 5.999987e-04:   0%|          | 313/111539 [00:51<4:58:32,  6.21it/s]
+
+afte wramup warmup. lr mult:  0.9999978197214249
+lr:  0.0005999986918328549
+afte wramup warmup. lr mult:  0.999997798867627
+lr:  0.0005999986793205762
+
+epoch 1 iter 314: train loss 2.56080. lr 5.999987e-04:   0%|          | 315/111539 [00:51<5:07:37,  6.03it/s]
+
+afte wramup warmup. lr mult:  0.9999977779145729
+lr:  0.0005999986667487437
+afte wramup warmup. lr mult:  0.9999977568622626
+lr:  0.0005999986541173575
+
+epoch 1 iter 316: train loss 2.38741. lr 5.999986e-04:   0%|          | 317/111539 [00:51<4:53:28,  6.32it/s]
+
+afte wramup warmup. lr mult:  0.999997735710696
+lr:  0.0005999986414264175
+afte wramup warmup. lr mult:  0.9999977144598731
+lr:  0.0005999986286759237
+
+epoch 1 iter 318: train loss 2.62099. lr 5.999986e-04:   0%|          | 319/111539 [00:52<4:46:18,  6.47it/s]
+
+afte wramup warmup. lr mult:  0.999997693109794
+lr:  0.0005999986158658763
+afte wramup warmup. lr mult:  0.9999976716604588
+lr:  0.0005999986029962752
+
+epoch 1 iter 320: train loss 2.50522. lr 5.999986e-04:   0%|          | 321/111539 [00:52<4:45:57,  6.48it/s]
+
+afte wramup warmup. lr mult:  0.9999976501118673
+lr:  0.0005999985900671203
+afte wramup warmup. lr mult:  0.9999976284640195
+lr:  0.0005999985770784117
+
+epoch 1 iter 322: train loss 2.45366. lr 5.999986e-04:   0%|          | 323/111539 [00:52<4:45:39,  6.49it/s]
+
+afte wramup warmup. lr mult:  0.9999976067169156
+lr:  0.0005999985640301493
+afte wramup warmup. lr mult:  0.9999975848705556
+lr:  0.0005999985509223333
+
+epoch 1 iter 324: train loss 2.69737. lr 5.999985e-04:   0%|          | 325/111539 [00:52<4:46:30,  6.47it/s]
+
+afte wramup warmup. lr mult:  0.9999975629249392
+lr:  0.0005999985377549635
+afte wramup warmup. lr mult:  0.9999975408800668
+lr:  0.00059999852452804
+
+epoch 1 iter 326: train loss 2.54659. lr 5.999985e-04:   0%|          | 327/111539 [00:53<4:47:26,  6.45it/s]
+
+afte wramup warmup. lr mult:  0.999997518735938
+lr:  0.0005999985112415628
+afte wramup warmup. lr mult:  0.9999974964925531
+lr:  0.0005999984978955318
+
+epoch 1 iter 328: train loss 2.38723. lr 5.999985e-04:   0%|          | 329/111539 [00:53<4:42:08,  6.57it/s]
+
+afte wramup warmup. lr mult:  0.999997474149912
+lr:  0.0005999984844899472
+afte wramup warmup. lr mult:  0.9999974517080148
+lr:  0.0005999984710248088
+
+epoch 1 iter 328: train loss 2.38723. lr 5.999985e-04:   0%|          | 329/111539 [00:53<5:02:16,  6.13it/s]
+
+---------------------------------------------------------------------------
+KeyboardInterrupt                         Traceback (most recent call last)
+<ipython-input-12-910632cbd7fe> in <module>
