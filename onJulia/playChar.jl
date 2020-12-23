@@ -19,7 +19,6 @@ lengthOfSentences=520
 model=Model.minGPT(maxBlockSize=lengthOfSentences, vocabSize=length(vocab))
 @show NumberOfParameters=sum(length(p) for p in params(model))
 
-
 ## ---
 
 
@@ -53,6 +52,11 @@ module Train include("src/train.jl") end
 
 ## ---
 
+decay = 0.1
+
+@show opt=Optimiser(opt,
+			Train.SelectiveWeightDecay(WeightDecay(decay), Model.noDecayList(model)))
+
 numberOfSentencesInBatch=15
 for i in 1:5
 	Train.train!(loss,
@@ -74,6 +78,9 @@ out=model(vocab(collect("Where ")))
 print(validate())
 
 ## ---
+
+
+
 
 #trying to track allocated
 d = [trainingData(lengthOfSentences, numberOfSentencesInBatch)[1]]

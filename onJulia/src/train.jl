@@ -1,12 +1,14 @@
 using TensorBoardLogger, Logging
-using Flux: gradient, update!
+using Flux: gradient, update!, WeightDecay
 using Juno
 using Profile
 using Statistics: norm
 using LinearAlgebra: rmul!
+import Flux.Optimise: apply!
 
 lg=TBLogger("./TesorBoardLog/run", min_level=Logging.Info)
 
+## ---
 
 # python impl uses clip_grad_norm_ to clip the norms.  It calculates the total norm of all gradients then does:
 # clip_coef = max_norm / (total_norm + 1e-6) to clip all the gradients
@@ -22,11 +24,35 @@ function clipGlobalNorm!(gs, ps, max=1.0)
 end
 
 
+
+## ---
+mutable struct SelectiveWeightDecay
+	wd::WeightDecay
+	noDecayList::IdDict
+end
+
+
+
+
+function apply!(o::SelectiveWeightDecay, x, Δ)
+	@show "SELECTIVE WEIGHT DECAY!!!"
+	@show length(o.noDecayList)
+	if haskey(o.noDecayList, x)
+		@show "in no decaylist"
+		return Δ
+	end
+	@show "object not in no decay list"
+	apply!(o.wd, x,  Δ)
+end
+
+## ---
+
 defaultValidate()=0
-function train!(loss, ps, data, opt , validate=defaultValidate, logger=lg)
+function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
 	  # training_loss is declared local so it will be available for logging outside the gradient calculation.
 	  local training_loss
 	  ctr=0
+
 	  @progress for d in data
 		@show ctr
 	    gs = gradient(ps) do

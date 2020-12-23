@@ -18,12 +18,13 @@ for the Julia implementation
 
 import Flux: Dense
 using Transformers: Transformer, PositionEmbedding, Embed
-using Transformers.Basic: Positionwise, Dropout
+using Transformers.Basic: Positionwise, PwFFN, Dropout
 using Flux:params, @functor, LayerNorm, Chain
 using NNlib: gelu
 using Random
 using Distributions: Normal, UnivariateDistribution
 using BSON: @save, @load
+
 
 smallNormalInit(out, in) = Float32.(rand(Normal(0.0, 0.02), out, in))
 zeroBias(x) = Float32.(zeros(x))
@@ -95,6 +96,74 @@ function minGPT(;numberAttnLayers=2, hiddenSize=512, attentionHeads=4, vocabSize
     )
 
     minGPT(embed,posembd, Dropout(pdrop), ln, c, pw)
+end
+
+## ---
+
+function noDecayList(t::Transformer, objs::IdDict=IdDict())
+	#MultiheadAttention is not exported from Transformers.  Get the noDecayList
+	#directly.
+	for o in [t.mh.iqproj.b,t.mh.ikproj.b,t.mh.ivproj.b,t.mh.oproj.b]
+							get!(objs, o, 1)
+	end
+
+	noDecayList(t.mhn, objs)
+	noDecayList(t.pw, objs)
+	noDecayList(t.pwn, objs)
+	noDecayList(t.drop, objs)
+	objs
+end
+
+function noDecayList(c::Chain, objs::IdDict=IdDict())
+	for i in 1:length(c.layers)
+		noDecayList(c.layers[i], objs)
+	end
+	objs
+end
+
+function noDecayList(pe::GPTPositionEmbedding, objs::IdDict=IdDict())
+	objs
+end
+
+function noDecayList(em::Embed, objs::IdDict=IdDict())
+
+	get!(objs, em.embedding, 1)
+	objs
+end
+
+function noDecayList(ln::LayerNorm, objs::IdDict=IdDict())
+	get!(objs, ln.diag.α, 1)
+	get!(objs, ln.diag.β, 1)
+	objs
+end
+
+function noDecayList(pw::PwFFN, objs::IdDict=IdDict())
+	get!(objs, pw.din.b, 1)
+	get!(objs, pw.dout.b, 1)
+	objs
+end
+
+function noDecayList(drop::Dropout, objs::IdDict=IdDict())
+	objs
+end
+
+function noDecayList(d::Dense, objs::IdDict=IdDict())
+	get!(objs, d.b, 1)
+	objs
+end
+
+function noDecayList(g::minGPT, objs::IdDict=IdDict())
+	noDecayList(g.em, objs)
+	noDecayList(g.pe, objs)
+	noDecayList(g.drop, objs)
+	noDecayList(g.ln, objs)
+	noDecayList(g.c, objs)
+	#noDecayList(g.pw)...,
+	for o in g.pw.models   # positionwise layers
+		noDecayList(o, objs)
+	end
+	objs
+
 end
 
 ## ---
