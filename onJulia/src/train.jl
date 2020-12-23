@@ -37,7 +37,6 @@ end
 function apply!(o::SelectiveWeightDecay, x, Δ)
 	length(o.noDecayList)
 	if haskey(o.noDecayList, x)
-		@show "in no decaylist"
 		return Δ
 	end
 	apply!(o.wd, x,  Δ)
