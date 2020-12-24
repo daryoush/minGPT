@@ -5,6 +5,7 @@ using Profile
 using Statistics: norm
 using LinearAlgebra: rmul!
 import Flux.Optimise: apply!
+using Statistics: norm, mean, std
 
 lg=TBLogger("./TesorBoardLog/run", min_level=Logging.Info)
 
@@ -49,7 +50,7 @@ function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
 	  # training_loss is declared local so it will be available for logging outside the gradient calculation.
 	  local training_loss
 	  ctr=0
-
+	  normList=[]
 	  @progress for d in data
 		@show ctr
 	    gs = gradient(ps) do
@@ -58,10 +59,12 @@ function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
 	      # it is better to do the work outside this block.
 	      return training_loss
 	    end
+
 		normBeforeAdj=sum(norm(gs[p])  for p in ps)
+		push!(normList, normBeforeAdj)
 		clipGlobalNorm!(gs, ps)
-		normAfterAdj=sum(norm(gs[p])  for p in ps)
-		@show normBeforeAdj, normAfterAdj
+		#normAfterAdj=sum(norm(gs[p])  for p in ps)
+
 
 	    # Insert whatever code you want here that needs training_loss, e.g. logging.
 	    # logging_callback(training_loss)
@@ -69,6 +72,11 @@ function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
 	    # E.g. logging with TensorBoardLogger.jl as histogram so you can see if it is becoming huge.
 
 		if ctr % 10 == 0
+
+			##TODO:::: SHOW AVE gradient norm over the last 10 runs
+
+			@show mean(normList), std(normList)
+			normList=[]
 			@show ctr, training_loss
 			@show training_accuracy = validate()
 			with_logger(logger) do
