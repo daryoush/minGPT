@@ -1,12 +1,12 @@
 using TensorBoardLogger, Logging
-using Flux: gradient, update!, WeightDecay
+using Flux: gradient, update!, WeightDecay, gpu
 using Juno
 using Profile
 using Statistics: norm
 using LinearAlgebra: rmul!
 import Flux.Optimise: apply!
 using Statistics: norm, mean, std
-
+using Flux: ADAMW, ADAM, RADAM, Momentum, Optimiser
 lg=TBLogger("./TesorBoardLog/run", min_level=Logging.Info)
 
 ## ---
@@ -45,14 +45,43 @@ end
 
 ## ---
 
+function cosRate( lr=6e-4, warmuptoken=512*20, len_train_dataset=1115394, blocksize=128, repeat=1)
+    finalTok=repeat*len_train_dataset*blocksize
+
+	function cosRateFun(token)
+		if token < warmuptoken
+			lr_mult = token / max(1, warmuptoken)
+		else
+	    	progress = (token - warmuptoken) / max(1, finalTok - warmuptoken)
+	    	lr_mult = max(0.1, 0.5 * (1.0 + cos(pi * progress)))
+		end
+    	lr_mult*lr
+	end
+	cosRateFun
+end
+
+updateLR(opt::ADAM, lr::Float64) = opt.eta=lr
+updateLR(opt::Optimiser, lr::Float64) = for o in opt.os  updateLR(o, lr) end
+updateLR(o, ::Float64)=nothing
+
+
+
 defaultValidate()=0
-function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
+function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg;rateDecay=cosRate(), repeat=1)
+	tokenCnt = 0
+	for batchCnt in 1:repeat
 	  # training_loss is declared local so it will be available for logging outside the gradient calculation.
 	  local training_loss
 	  ctr=0
 	  normList=[]
-	  @progress for d in data
-		@show ctr
+	  tokensInBatch(b)=size(b[1])[1] * size(b[1])[2]   #number of char in sentences, and number of sentences
+	  numberOfBatches=size(data)
+	  @progress for next in data
+		tokenCnt = tokenCnt + tokensInBatch(next)
+		lr=rateDecay(tokenCnt)
+		updateLR(opt, lr)
+		d = next |> gpu
+		@show ctr, numberOfBatches
 	    gs = gradient(ps) do
 	      training_loss = loss(d...)
 	      # Code inserted here will be differentiated, unless you need that gradient information
@@ -74,7 +103,6 @@ function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
 		if ctr % 10 == 0
 
 			##TODO:::: SHOW AVE gradient norm over the last 10 runs
-
 			@show mean(normList), std(normList)
 			normList=[]
 			@show ctr, training_loss
@@ -88,4 +116,5 @@ function train!(loss, ps, data, opt, validate=defaultValidate, logger=lg)
 	    update!(opt, ps, gs)
 	    # Here you might like to check validation set accuracy, and break out to do early stopping.
 	  end
+  end
 end

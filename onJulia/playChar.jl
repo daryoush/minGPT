@@ -1,21 +1,23 @@
+
 ## ---
 	using Flux: onehot
 	using Transformers: Vocabulary, decode
 	using Random
 	using Flux: throttle, @epochs, ADAMW, ADAM, RADAM, Momentum, Optimiser, logitcrossentropy, params
-	using Flux: softmax, onecold
+	using Flux: softmax, onecold, WeightDecay
 	using DataStructures: Queue
 	Random.seed!(42)
 
 ## ---
 module Datasets include("src/datasets.jl") end
 dataSetlength, vocab, sample = Datasets.openDataset("input.txt")
-batch(dataLength,batchLength ) = hcat((sample(dataLength) for x in 1:batchLength)...)
+batch(eachSampleSize,batchSize ) = hcat((sample(eachSampleSize) for x in 1:batchSize)...)
 
 ## ---
 module Model include("src/model.jl") end
 
-lengthOfSentences=520
+lengthOfSentences=280
+numberOfSentencesInBatch=15
 model=Model.minGPT(maxBlockSize=lengthOfSentences, vocabSize=length(vocab))
 @show NumberOfParameters=sum(length(p) for p in params(model))
 
@@ -27,8 +29,8 @@ model=Model.minGPT(maxBlockSize=lengthOfSentences, vocabSize=length(vocab))
 # values as a long one dim series of values, one hot encode them using the vocab
 
 trainingDataPair(b)=(b[1:end-1, :], onehot(vocab, reshape(b[2:end,:], :)))
-trainingData(dataLength,batchLength)= [trainingDataPair(batch(dataLength,batchLength))
-		for i in 1:dataSetlength/(dataLength*batchLength)]
+trainingData(eachSampleSize=lengthOfSentences,batchSize=numberOfSentencesInBatch)= [trainingDataPair(batch(eachSampleSize,batchSize))
+		for i in 1:dataSetlength/batchSize]  # count each sentence, no matter its length as one sample
 
 function loss(x,y)
 	yhat=model(x)
@@ -44,7 +46,8 @@ function validate()
 	end
 	join(s)
 end
-opt = ADAM()
+opt = ADAM(0.00058, (0.9, 0.95))
+
 
 ## ---
 module Train include("src/train.jl") end
@@ -53,18 +56,16 @@ module Train include("src/train.jl") end
 ## ---
 
 decay = 0.1
-
-@show opt=Optimiser(opt,
+optWithWeightDecay=Optimiser(opt,
 			Train.SelectiveWeightDecay(WeightDecay(decay), Model.noDecayList(model)))
 
-numberOfSentencesInBatch=15
-for i in 1:5
-	Train.train!(loss,
+
+Train.train!(loss,
  				params(model),
-				trainingData(lengthOfSentences, numberOfSentencesInBatch),
-				opt,
-				validate)
-			end
+				trainingData(),  # use the defaults
+				optWithWeightDecay,
+				validate, repeat=2)
+
 
 
 ## ---
@@ -82,17 +83,20 @@ print(validate())
 
 
 
+
 #trying to track allocated
-d = [trainingData(lengthOfSentences, numberOfSentencesInBatch)[1]]
+d = [trainingData(10, 2)[1]]   # use small sentence size, 10, and 2 sentences in batch to get idea of timing
 @timed Train.train!(loss,
  				params(model),
 				d,
 				opt)
 ## ---
 using Profile
+numberOfSentencesInBatch=10
+lengthOfSentences=
+d = [trainingData(512, 10)[1]]  # 10 sentnces of 512 char
 
 Profile.clear()
-d = [trainingData(lengthOfSentences, numberOfSentencesInBatch)[1]]
 
 @profile Train.train!(loss,
  				params(model),
